@@ -1,11 +1,13 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
+import mongoose from "mongoose";
 import expenseRoute from "./Routes/ExpenseRoute.js";
 import authRoute from "./Routes/AuthRoute.js";
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
+const mongoUri = process.env.MONGO_URI;
 
 // Middlewares
 app.use(
@@ -14,7 +16,7 @@ app.use(
     methods: ["GET", "POST", "DELETE", "PATCH"],
   })
 );
-app.use(express());
+app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
@@ -23,10 +25,17 @@ app.get("/", (req, res) => {
     message: "all its ok",
   });
 });
-
 app.use("/expense", expenseRoute);
 app.use("/auth", authRoute);
 
-app.listen(port, () => {
-  console.log(`DB and server runnig on port ${port}`);
-});
+// db
+mongoose
+  .connect(mongoUri)
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`DB and server runnig on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
