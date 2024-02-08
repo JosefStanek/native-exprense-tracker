@@ -6,6 +6,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import RegisterScreen from "./Screens/public/RegisterScreen";
 import LoginScreen from "./Screens/public/LoginScreen";
 import AppScreen from "./Screens/protect/AppScreen";
+import { Provider } from "react-redux";
+import store from "./store/store";
 import { Colors } from "./Theme/colors";
 
 const Stack = createStackNavigator();
@@ -36,10 +38,12 @@ function ProtectNavigation() {
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
-        <PublicNavigation />
-      </NavigationContainer>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <PublicNavigation />
+        </NavigationContainer>
+      </QueryClientProvider>
+    </Provider>
   );
 }
