@@ -13,7 +13,7 @@ const createToken = ({ _id }) => {
 };
 
 // register controller
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     const user = await User.register(email, password);

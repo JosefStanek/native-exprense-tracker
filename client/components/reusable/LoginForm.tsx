@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 interface loginFormProps {
   buttonText: string;
   status: string;
-  sendForm: (email: string, password: string, login: boolean) => {};
+  sendForm: (email: string, password: string, login: boolean) => void;
 }
 
 interface formData {

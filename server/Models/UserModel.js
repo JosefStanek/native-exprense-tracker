@@ -27,7 +27,7 @@ userSchema.statics.register = async function (email, password) {
   // end of validation
   const findUser = await this.findOne({ email });
   if (findUser) {
-    throw Error("User exist");
+    throw new Error("User exist");
   }
 
   const salt = await bcrypt.genSalt(10);

@@ -3,13 +3,47 @@ import Card from "../../components/ui/Card";
 import { Colors } from "../../Theme/colors";
 import LoginForm from "../../components/reusable/LoginForm";
 import Title from "../../components/ui/Title";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 interface registerProps {
   navigation: any;
 }
+type formData = {
+  email: string;
+  password: string;
+  login: boolean;
+};
 
 const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
+  const { mutate } = useMutation({
+    mutationFn: async (data: formData) => {
+      if (data.login === false) {
+        const res = await axios.post(
+          `http://192.168.0.80:3000/auth/api/register`,
+          {
+            email: data.email,
+            password: data.password,
+          }
+        );
+        return res.data;
+      } else {
+        return;
+      }
+    },
+    onSuccess: (data) => {
+      console.log(console.log("data", data));
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        console.log(error.response?.data.error);
+      } else {
+        return "An unexpected error occurred";
+      }
+    },
+  });
+
   const login = (email: string, password: string, login: boolean) => {
-    console.log("login", email, password, login);
+    mutate({ email, password, login });
   };
   return (
     <View style={styles.screen}>

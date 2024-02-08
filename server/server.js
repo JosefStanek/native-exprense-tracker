@@ -12,7 +12,7 @@ const mongoUri = process.env.MONGO_URI;
 // Middlewares
 app.use(
   cors({
-    origin: "192.168.0.80:8081",
+    origin: "http://192.168.0.80:8081",
     methods: ["GET", "POST", "DELETE", "PATCH"],
   })
 );
