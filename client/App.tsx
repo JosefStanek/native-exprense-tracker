@@ -6,10 +6,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import RegisterScreen from "./Screens/public/RegisterScreen";
 import LoginScreen from "./Screens/public/LoginScreen";
 import AppScreen from "./Screens/protect/AppScreen";
+import AddScreen from "./Screens/protect/AddScreen";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import { Colors } from "./Theme/colors";
-
+import { AntDesign } from "@expo/vector-icons";
+import ListScreen from "./Screens/protect/ListScreen";
 const Stack = createStackNavigator();
 
 function PublicNavigation() {
@@ -31,9 +33,24 @@ function PublicNavigation() {
 }
 
 function ProtectNavigation() {
-  <Stack.Navigator>
-    <Stack.Screen name="Expenses" component={AppScreen} />
-  </Stack.Navigator>;
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.primary,
+        },
+        headerTitleAlign: "center",
+        headerTitleStyle: {
+          textTransform: "uppercase",
+        },
+        headerTintColor: "white",
+      }}
+    >
+      <Stack.Screen name="Expenses" component={AppScreen} />
+      <Stack.Screen name="add" component={AddScreen} />
+      <Stack.Screen name="list" component={ListScreen} />
+    </Stack.Navigator>
+  );
 }
 
 export default function App() {
@@ -41,7 +58,8 @@ export default function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
-          <PublicNavigation />
+          {/* <PublicNavigation /> */}
+          <ProtectNavigation />
         </NavigationContainer>
       </QueryClientProvider>
     </Provider>
