@@ -4,9 +4,6 @@ import { Colors } from "../../Theme/colors";
 import { Entypo } from "@expo/vector-icons";
 import { useEffect } from "react";
 import Card from "../../components/ui/Card";
-type reduxState = {
-  user: string;
-};
 
 interface appScreenProps {
   navigation: any;
@@ -51,6 +48,7 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
     { value: 40, color: Colors.secondary },
     { value: 20, color: "orange" },
   ];
+
   return (
     <View>
       <Card>
