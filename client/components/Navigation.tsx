@@ -9,6 +9,7 @@ import AddScreen from "../Screens/protect/AddScreen";
 import { Colors } from "../Theme/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import ListItemScreen from "../Screens/protect/ListItemScreen";
 const Stack = createStackNavigator();
 
 function PublicNavigation() {
@@ -43,9 +44,14 @@ function ProtectNavigation() {
         headerTintColor: "white",
       }}
     >
-      <Stack.Screen name="Expenses" component={AppScreen} />
+      <Stack.Screen name="expenses" component={AppScreen} />
       <Stack.Screen name="add" component={AddScreen} />
-      <Stack.Screen name="list" component={ListScreen} />
+      <Stack.Screen
+        name="list"
+        component={ListScreen}
+        options={{ headerTitleStyle: { opacity: 0 } }}
+      />
+      <Stack.Screen name="listItem" component={ListItemScreen} />
     </Stack.Navigator>
   );
 }

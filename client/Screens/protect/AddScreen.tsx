@@ -21,7 +21,10 @@ const AddScreen: React.FC = () => {
     mutationFn: async (data: formData) => {
       console.log(data);
     },
+    onError: () => {},
+    onSuccess: () => {},
   });
+
   const onSubmit = (data: formData) => {
     mutate(data);
   };

@@ -1,28 +1,48 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
 import React from "react";
 import { Colors } from "../../Theme/colors";
-
-const ListScreen = () => {
-  const data2 = [
-    { key: "1", value: "Food" },
-    { key: "2", value: "Fun" },
-    { key: "3", value: "Education" },
-    { key: "4", value: "Work" },
-    { key: "5", value: "Services" },
-    { key: "6", value: "Other" },
+import { MaterialIcons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+interface ListScreenProps {
+  navigation: any;
+}
+const ListScreen: React.FC<ListScreenProps> = ({ navigation }) => {
+  const { user } = useSelector((state: RootState) => state.user);
+  const list = [
+    { key: "Food", value: "Food", color: Colors.secondary },
+    { key: "Fun", value: "Fun", color: Colors.primary },
+    { key: "Education", value: "Education", color: Colors.amber },
+    { key: "Work", value: "Work", color: Colors.grass },
+    { key: "Services", value: "Services", color: Colors.sky },
+    { key: "Other", value: "Other", color: Colors.fuchsia },
   ];
   return (
     <View style={styles.screen}>
-      <View style={{ flex: 1, width: 200, height: 200 }}>
-        <Pressable style={styles.expenses} android_ripple={{ color: "white" }}>
-          <Text style={styles.title}>Expenses</Text>
-        </Pressable>
-      </View>
-      <View style={{ flex: 1 }}>
-        <Pressable style={styles.expenses} android_ripple={{ color: "white" }}>
-          <Text style={styles.title}>Expenses</Text>
-        </Pressable>
-      </View>
+      <FlatList
+        data={list}
+        renderItem={(dataItem) => (
+          <Pressable
+            style={[
+              styles.outerContainer,
+              { backgroundColor: dataItem.item.color },
+            ]}
+            android_ripple={{ color: Colors.basicLight }}
+            onPress={() => {
+              navigation.navigate("listItem", {
+                userId: user,
+                listId: dataItem.item.value,
+                color: dataItem.item.color,
+              });
+            }}
+          >
+            <View style={styles.innerContainer}>
+              <Text style={styles.title}>{dataItem.item.value}</Text>
+              <MaterialIcons name="navigate-next" size={24} color="white" />
+            </View>
+          </Pressable>
+        )}
+      />
     </View>
   );
 };
@@ -32,28 +52,29 @@ export default ListScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    gap: 10,
+    padding: 10,
   },
-  expenses: {
-    borderWidth: 1,
-    backgroundColor: Colors.primary,
-    padding: 40,
-    flex: 1,
+  outerContainer: {
     justifyContent: "center",
     alignItems: "center",
+    alignSelf: "center",
+    width: "80%",
+    height: 100,
+    margin: 10,
+    borderRadius: 10,
+    elevation: 10,
   },
-  income: {
-    borderWidth: 1,
-    backgroundColor: Colors.secondary,
-    margin: 40,
-    flex: 1,
-    justifyContent: "center",
+  innerContainer: {
+    flexDirection: "row",
     alignItems: "center",
   },
   title: {
     textTransform: "uppercase",
-    fontSize: 10,
-    fontWeight: "bold",
     color: Colors.basicLight,
+    fontSize: 20,
+    fontWeight: "bold",
+    textDecorationStyle: "dashed",
+    textShadowColor: "black",
+    letterSpacing: 2,
   },
 });
