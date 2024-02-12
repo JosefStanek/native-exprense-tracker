@@ -1,8 +1,15 @@
 import { View, Text } from "react-native";
-import { PieChart } from "react-native-gifted-charts";
 import { Colors } from "../../Theme/colors";
 import { Entypo } from "@expo/vector-icons";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import PieGraph from "../../components/reusable/PieGraph";
+import ExpenseBar from "../../components/AppScreen/ExpenseBar";
+import CategoryList from "../../components/AppScreen/CategoryList";
+import { useQuery } from "@tanstack/react-query";
+import { getTotal } from "../../http/expense-http";
+import { ScrollView } from "react-native-gesture-handler";
 import Card from "../../components/ui/Card";
 
 interface appScreenProps {
@@ -10,6 +17,7 @@ interface appScreenProps {
 }
 
 const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
+  const { user } = useSelector((state: RootState) => state.user);
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -40,65 +48,35 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const pieData = [
-    {
-      value: 54,
-      color: Colors.primary,
-    },
-    { value: 40, color: Colors.secondary },
-    { value: 20, color: "orange" },
-  ];
+  const { data, isPending } = useQuery({
+    queryKey: ["total"],
+    queryFn: async () => getTotal(user),
+  });
 
   return (
-    <View>
-      <Card>
-        <View
-          style={{ flexDirection: "row", gap: 20, justifyContent: "center" }}
-        >
-          <Text>Total: 300</Text>
-          <Text>Expenses: 20</Text>
-          <Text>Income: 20</Text>
-        </View>
-      </Card>
-
-      <View style={{ alignItems: "center" }}>
-        <Card>
-          <View style={{ padding: 20 }}>
-            <PieChart
-              data={pieData}
-              radius={100}
-              donut
-              showText
-              showValuesAsLabels
-              textBackgroundRadius={22}
-              textColor="white"
-              textSize={16}
-              fontWeight="bold"
-              strokeColor="#333"
-              innerCircleBorderWidth={10}
+    <>
+      <ScrollView>
+        {isPending && <Text>loading</Text>}
+        {data && (
+          <>
+            <ExpenseBar
+              totalLength={data.totalLength}
+              incomeLength={data.incomeLength}
+              expenseLength={data.expenseLength}
             />
-            <View
-              style={{
-                flexDirection: "row",
-                gap: 20,
-                justifyContent: "center",
-                marginTop: 20,
-              }}
-            >
-              <Text style={{ color: "indigo" }}>Total</Text>
-              <Text style={{ color: "crimson" }}>Expenses</Text>
-              <Text style={{ color: "orange" }}>Income</Text>
-            </View>
+            <PieGraph pieData={data} />
+            <CategoryList />
+          </>
+        )}
+      </ScrollView>
+      {data && data.expenseLength > 0 && (
+        <ScrollView horizontal={true}>
+          <View>
+            <Text>{data.expenses[0].name}</Text>
           </View>
-        </Card>
-      </View>
-      <Card>
-        <Text>Last Expense</Text>
-      </Card>
-      <Card>
-        <Text>Last Income</Text>
-      </Card>
-    </View>
+        </ScrollView>
+      )}
+    </>
   );
 };
 

@@ -2,6 +2,9 @@ import Card from "../../components/ui/Card";
 import Title from "../../components/ui/Title";
 import AddForm from "../../components/reusable/AddForm";
 import { useMutation } from "@tanstack/react-query";
+import { postExpense } from "../../http/expense-http";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 interface formData {
   name: string;
   amount: string;
@@ -12,17 +15,24 @@ interface formData {
 const initialData = {
   name: "",
   amount: "",
-  payment: { key: "", value: "" },
-  type: { key: "", value: "" },
+  payment: { key: "Food", value: "Food" },
+  type: { key: "Expenses", value: "Expenses" },
 };
 
 const AddScreen: React.FC = () => {
+  const { user } = useSelector((state: RootState) => state.user);
+
   const { mutate } = useMutation({
     mutationFn: async (data: formData) => {
-      console.log(data);
+      const formData = { ...data, userId: user };
+      postExpense(formData);
     },
-    onError: () => {},
-    onSuccess: () => {},
+    onSuccess: () => {
+      console.log("on success");
+    },
+    onError: () => {
+      console.log("on error");
+    },
   });
 
   const onSubmit = (data: formData) => {

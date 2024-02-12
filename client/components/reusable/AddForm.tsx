@@ -26,6 +26,7 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<formData>({
     defaultValues: {
       name: initialData.name,
@@ -50,6 +51,12 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
 
   const onSubmit = (data: formData) => {
     sendForm(data);
+    reset({
+      name: initialData.name,
+      amount: initialData.amount,
+      payment: initialData.payment,
+      type: initialData.type,
+    });
   };
   return (
     <ScrollView style={styles.innerContainer}>
@@ -132,7 +139,7 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
           rules={{
             required: true,
           }}
-          render={({ field: { onChange, onBlur } }) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <SelectList
               setSelected={(val: any) => onChange(val)}
               data={list}

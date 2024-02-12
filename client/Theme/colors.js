@@ -7,4 +7,5 @@ export const Colors = {
   sky: "#38bdf8",
   grass: "#4ade80",
   amber: "#facc15",
+  sun: "orange",
 };

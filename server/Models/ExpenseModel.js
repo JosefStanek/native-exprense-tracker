@@ -4,20 +4,27 @@ const Schema = mongoose.Schema;
 const ExpenseSchema = new Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      type: String,
+      required: [true, "Please login in and try again"],
     },
     type: {
-      type: String,
-      required: [true, "Enter your type"],
+      key: { type: String, required: [true, "Valid type key"] },
+      value: { type: String, required: [true, "Valid type value"] },
     },
-    value: {
+    payment: {
+      key: { type: String, required: [true, "Valid payment key"] },
+      value: { type: String, required: [true, "Valid payment value"] },
+    },
+    amount: {
       type: String,
-      required: [true, "Enter your value"],
+      required: [true, "Enter your amount"],
+    },
+    name: {
+      type: String,
+      required: [true, "Enter your name"],
     },
   },
   { timestamps: true }
 );
 
-export const Expense = mongoose.model("Exprense", ExpenseSchema);
+export const Expense = mongoose.model("Expense", ExpenseSchema);
