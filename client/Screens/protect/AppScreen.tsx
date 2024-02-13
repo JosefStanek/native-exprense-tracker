@@ -4,11 +4,11 @@ import { Entypo } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import PieGraph from "../../components/reusable/PieGraph";
+import PieGraph from "../../components/AppScreen/PieGraph";
 import ExpenseBar from "../../components/AppScreen/ExpenseBar";
 import { useQuery } from "@tanstack/react-query";
 import { getTotal } from "../../http/expense-http";
-import BarGraph from "../../components/reusable/BarGraph";
+import BarGraph from "../../components/AppScreen/BarGraph";
 import Card from "../../components/ui/Card";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 interface appScreenProps {
@@ -60,7 +60,7 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
           <ExpenseBar expenses={data.expenses} incomes={data.incomes} />
 
           <PieGraph pieData={data} />
-          <BarGraph barData={data} />
+          <BarGraph barData={data.total} />
 
           <Card>
             <Text>Last Expense: </Text>
