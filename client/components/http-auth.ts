@@ -1,6 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
 import axios from "axios";
-export const queryClient = new QueryClient();
 const url = `http://192.168.0.80:3000`;
 
 export const registerUser = async (email: string, password: string) => {

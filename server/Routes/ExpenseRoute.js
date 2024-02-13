@@ -1,8 +1,7 @@
 import express from "express";
 import {
   getExpenses,
-  getExpense,
-  getIncome,
+  getCategory,
   postExpenses,
   deleteExpenses,
   updateExpenses,
@@ -12,9 +11,8 @@ const router = express.Router();
 // get all
 router.get("/api/:userId", getExpenses);
 // get expense
-router.get("/api/exp", getExpense);
-// get income
-router.get("/api/inc", getIncome);
+router.get("/api/:userId/:category", getCategory);
+
 // post expense/income
 router.post("/api", postExpenses);
 // post delete expense/income

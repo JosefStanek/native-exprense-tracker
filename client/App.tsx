@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "./components/http-auth";
+import { queryClient } from "./http/expense-http";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import Navigation from "./components/Navigation";

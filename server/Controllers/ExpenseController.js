@@ -10,7 +10,7 @@ export const getExpenses = async (req, res) => {
 
     const [total, expenses, incomes] = await Promise.all([
       Expense.find({ userId: userId }),
-      Expense.find({ userId: userId, "payment.value": "Expense" })
+      Expense.find({ userId: userId, "payment.value": "Expenses" })
         .sort("-createdAt")
         .then((expenses) => {
           return expenses;
@@ -22,13 +22,43 @@ export const getExpenses = async (req, res) => {
         }),
     ]);
 
+    console.log(total);
+
     return res.status(200).json({
       total: total,
       expenses: expenses,
       incomes: incomes,
-      totalLength: expenses.length,
+      totalLength: total.length,
       expenseLength: expenses.length,
       incomeLength: incomes.length,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getCategory = async (req, res) => {
+  try {
+    const { userId, category } = req.params;
+    if (!userId || category) {
+      return res.status(401).json({
+        message: "Unauthorizate",
+      });
+    }
+
+    const categories = await Expense.find({
+      userId: userId,
+      "type.value": category,
+    })
+      .sort("-createdAt")
+      .then((categories) => {
+        return categories;
+      });
+
+    return res.status(200).json({
+      categories,
     });
   } catch (error) {
     return res.status(500).json({

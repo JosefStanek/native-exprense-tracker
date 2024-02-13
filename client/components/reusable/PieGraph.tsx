@@ -5,12 +5,39 @@ import Card from "../ui/Card";
 
 interface pieGraphProps {
   pieData: {
-    expenseLength: any;
-    incomeLength: any;
-    totalLength: any;
-    expenses: {}[];
-    total: {}[];
-    incomes: {}[];
+    expenseLength: number;
+    incomeLength: number;
+    totalLength: number;
+    expenses: {
+      amount: string;
+      createdAt: string;
+      name: string;
+      payment: { key: string; value: string };
+      type: { key: string; value: string };
+      updatedAt: string;
+      userId: string;
+      _id: string;
+    }[];
+    total: {
+      amount: string;
+      createdAt: string;
+      name: string;
+      payment: { key: string; value: string };
+      type: { key: string; value: string };
+      updatedAt: string;
+      userId: string;
+      _id: string;
+    }[];
+    incomes: {
+      amount: string;
+      createdAt: string;
+      name: string;
+      payment: { key: string; value: string };
+      type: { key: string; value: string };
+      updatedAt: string;
+      userId: string;
+      _id: string;
+    }[];
   };
 }
 
@@ -33,7 +60,7 @@ const PieGraph: React.FC<pieGraphProps> = ({ pieData }) => {
       )}
       {pieData.totalLength > 0 && (
         <Card>
-          <View style={{ padding: 20 }}>
+          <View style={styles.container}>
             <PieChart
               data={data}
               radius={100}
@@ -55,9 +82,15 @@ const PieGraph: React.FC<pieGraphProps> = ({ pieData }) => {
                 marginTop: 20,
               }}
             >
-              <Text style={{ color: Colors.primary }}>Total</Text>
-              <Text style={{ color: Colors.secondary }}>Expenses</Text>
-              <Text style={{ color: Colors.sun }}>Income</Text>
+              <Text style={{ color: Colors.primary }}>
+                Total: {pieData.totalLength}
+              </Text>
+              <Text style={{ color: Colors.secondary }}>
+                Expenses {pieData.expenseLength}
+              </Text>
+              <Text style={{ color: Colors.sun }}>
+                Income {pieData.incomeLength}
+              </Text>
             </View>
           </View>
         </Card>
@@ -69,6 +102,11 @@ const PieGraph: React.FC<pieGraphProps> = ({ pieData }) => {
 export default PieGraph;
 
 const styles = StyleSheet.create({
+  container: {
+    minWidth: "100%",
+    padding: 20,
+    alignItems: "center",
+  },
   image: {
     width: "90%",
     height: 400,
