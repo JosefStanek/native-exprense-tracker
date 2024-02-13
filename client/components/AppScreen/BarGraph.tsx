@@ -69,7 +69,6 @@ const getData = (
 
 const BarGraph: React.FC<barGraphProps> = ({ barData }) => {
   const extractedData = getData(barData);
-  console.log(extractedData);
   return (
     <Card>
       <BarChart
@@ -90,7 +89,9 @@ const BarGraph: React.FC<barGraphProps> = ({ barData }) => {
         }}
       >
         {extractedData.map((item) => (
-          <Text style={{ color: item.frontColor }}>{item.label}</Text>
+          <Text key={item.label} style={{ color: item.frontColor }}>
+            {item.label}
+          </Text>
         ))}
       </View>
     </Card>

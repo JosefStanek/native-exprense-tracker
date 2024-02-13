@@ -7,7 +7,6 @@ export const registerUser = async (email: string, password: string) => {
       email,
       password,
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -24,7 +23,6 @@ export const loginUser = async (email: string, password: string) => {
       email,
       password,
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

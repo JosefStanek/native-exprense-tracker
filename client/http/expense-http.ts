@@ -13,7 +13,6 @@ interface formData {
 }
 
 export const postExpense = async (data: formData) => {
-  console.log(data);
   try {
     const res = await axios.post(`${url}/expense/api`, data);
     return res.data.message;
@@ -29,7 +28,6 @@ export const postExpense = async (data: formData) => {
 export const getTotal = async (user: string) => {
   try {
     const res = await axios.get(`${url}/expense/api/${user}`);
-    console.log(res.data);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -43,7 +41,6 @@ export const getTotal = async (user: string) => {
 export const getCategoryList = async (user: string, category: string) => {
   try {
     const res = await axios.get(`${url}/expense/api/${user}/${category}`);
-    console.log(res.data);
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -36,7 +36,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data.error);
+        return error.response?.data.error;
       } else {
         return "An unexpected error occurred";
       }

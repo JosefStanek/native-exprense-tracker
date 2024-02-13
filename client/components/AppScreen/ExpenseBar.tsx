@@ -50,7 +50,6 @@ const getTotalIncome = (incomes: { amount: string }[]) => {
 };
 
 const ExpenseBar: React.FC<expenseBarProps> = ({ expenses, incomes }) => {
-  console.log("expenses", expenses);
   const expense = getTotalExpense(expenses);
   const income = getTotalIncome(incomes);
   const total = income - expense;

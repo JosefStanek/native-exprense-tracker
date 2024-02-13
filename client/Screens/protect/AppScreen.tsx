@@ -11,6 +11,7 @@ import { getTotal } from "../../http/expense-http";
 import BarGraph from "../../components/AppScreen/BarGraph";
 import Card from "../../components/ui/Card";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import LastValues from "../../components/AppScreen/LastValues";
 interface appScreenProps {
   navigation: any;
 }
@@ -61,11 +62,7 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
 
           <PieGraph pieData={data} />
           <BarGraph barData={data.total} />
-
-          <Card>
-            <Text>Last Expense: </Text>
-            <Text>Last Income: </Text>
-          </Card>
+          <LastValues expenses={data.expenses} incomes={data.incomes} />
         </>
       )}
     </ScrollView>
