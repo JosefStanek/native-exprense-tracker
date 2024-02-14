@@ -67,3 +67,30 @@ export const deleteExpense = async (id: string) => {
     }
   }
 };
+
+export const updateExpense = async (data: formData) => {
+  try {
+    const res = await axios.post(`${url}/expense/api`, data);
+    await queryClient.invalidateQueries({ queryKey: ["total"] });
+    return res.data.message;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data.error;
+    } else {
+      return "An unexpected error occurred";
+    }
+  }
+};
+
+export const getExpenseItem = async (user: string, itemId: string) => {
+  try {
+    const res = await axios.get(`${url}/expense/api/${user}/item/${itemId}`);
+    return res.data.item;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data.error;
+    } else {
+      return "An unexpected error occurred";
+    }
+  }
+};

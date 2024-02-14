@@ -5,14 +5,16 @@ import {
   postExpenses,
   deleteExpenses,
   updateExpenses,
+  getExpenseItem,
 } from "../Controllers/ExpenseController.js";
 const router = express.Router();
 
 // get all
 router.get("/api/:userId", getExpenses);
-// get expense
+// get category
 router.get("/api/:userId/:category", getCategory);
-
+// get one expense item
+router.get("/api/:userId/item/:itemId", getExpenseItem);
 // post expense/income
 router.post("/api", postExpenses);
 // post delete expense/income

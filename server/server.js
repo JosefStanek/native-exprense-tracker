@@ -20,7 +20,6 @@ app.use(express.json());
 
 // Routes
 app.get("/", (req, res) => {
-  console.log(req);
   res.status(200).json({
     message: "all its ok",
   });

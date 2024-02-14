@@ -1,10 +1,18 @@
-import { View, Text, StyleSheet, Dimensions, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  ToastAndroid,
+} from "react-native";
 import Card from "../ui/Card";
 import { Colors } from "../../Theme/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import moment from "moment";
 import { useMutation } from "@tanstack/react-query";
 import { deleteExpense } from "../../http/expense-http";
+import { useNavigation } from "@react-navigation/native";
 interface ListItemProps {
   item: {
     _id: string;
@@ -22,6 +30,7 @@ interface ListItemProps {
 const width = Dimensions.get("window").width;
 const itemWidth = width - 100;
 const ListItem: React.FC<ListItemProps> = ({ item, backgroundColor }) => {
+  const navigation = useNavigation<any>();
   const { mutate } = useMutation({
     mutationFn: () => deleteExpense(item._id),
     onSuccess: () => {
@@ -42,7 +51,10 @@ const ListItem: React.FC<ListItemProps> = ({ item, backgroundColor }) => {
           <View style={styles.iconContainer}>
             <Pressable
               onPress={() => {
-                console.log("redirect");
+                navigation.navigate("listItemDetail", {
+                  expenseId: item._id,
+                  backgroundColor: backgroundColor,
+                });
               }}
             >
               <MaterialCommunityIcons

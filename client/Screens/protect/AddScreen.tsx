@@ -3,39 +3,27 @@ import Title from "../../components/ui/Title";
 import AddForm from "../../components/reusable/AddForm";
 import { useMutation } from "@tanstack/react-query";
 import { postExpense } from "../../http/expense-http";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
-interface formData {
+
+type transformForm = {
   name: string;
   amount: string;
-  payment: string;
-  type: string;
-}
+  payment: { key: string; value: string };
+  type: { key: string; value: string };
+  userId: string;
+};
 
 const initialData = {
   name: "",
   amount: "",
-  payment: { key: "Expenses", value: "Expenses" },
-  type: { key: "Food", value: "Food" },
+  payment: "Expenses",
+  type: "Food",
 };
 
-interface addScreenProps {
-  navigation: any;
-}
-
-const AddScreen: React.FC<addScreenProps> = ({ navigation }) => {
-  const { user } = useSelector((state: RootState) => state.user);
-
+const AddScreen: React.FC = () => {
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: formData) => {
-      const formData = {
-        ...data,
-        payment: { key: data.payment, value: data.payment },
-        type: { key: data.type, value: data.type },
-        userId: user,
-      };
-      postExpense(formData);
+    mutationFn: async (data: transformForm) => {
+      postExpense(data);
     },
     onSuccess: async () => {
       console.log("on success");
@@ -45,7 +33,7 @@ const AddScreen: React.FC<addScreenProps> = ({ navigation }) => {
     },
   });
 
-  const onSubmit = (data: formData) => {
+  const onSubmit = (data: transformForm) => {
     mutate(data);
   };
   return (

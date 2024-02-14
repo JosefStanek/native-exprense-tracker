@@ -10,6 +10,7 @@ import { Colors } from "../Theme/colors";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import ListItemScreen from "../Screens/protect/ListItemScreen";
+import ListItemDetailScreen from "../Screens/protect/ListItemDetailScreen";
 const Stack = createStackNavigator();
 
 function PublicNavigation() {
@@ -52,6 +53,7 @@ function ProtectNavigation() {
         options={{ headerTitleStyle: { opacity: 0 } }}
       />
       <Stack.Screen name="listItem" component={ListItemScreen} />
+      <Stack.Screen name="listItemDetail" component={ListItemDetailScreen} />
     </Stack.Navigator>
   );
 }

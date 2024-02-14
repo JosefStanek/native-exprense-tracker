@@ -22,8 +22,6 @@ export const getExpenses = async (req, res) => {
         }),
     ]);
 
-    console.log(total);
-
     return res.status(200).json({
       total: total,
       expenses: expenses,
@@ -39,10 +37,35 @@ export const getExpenses = async (req, res) => {
   }
 };
 
+export const getExpenseItem = async (req, res) => {
+  try {
+    const { userId, itemId } = req.params;
+
+    if (!userId || !itemId) {
+      return res.status(401).json({
+        message: "Missing userId or itemId",
+      });
+    }
+
+    const item = await Expense.findOne({ userId: userId, _id: itemId });
+    if (!item) {
+      return res.status(404).json({
+        message: "Item not found",
+      });
+    }
+    return res.status(200).json({
+      item,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const getCategory = async (req, res) => {
   try {
     const { userId, category } = req.params;
-    console.log(userId, category);
     if (!userId || !category) {
       return res.status(401).json({
         message: "Unauthorizate",
@@ -58,7 +81,6 @@ export const getCategory = async (req, res) => {
         return categories;
       });
 
-    console.log(categories);
     return res.status(200).json({
       categories,
     });
@@ -68,8 +90,7 @@ export const getCategory = async (req, res) => {
     });
   }
 };
-export const getExpense = async (req, res) => {};
-export const getIncome = async (req, res) => {};
+
 export const postExpenses = async (req, res) => {
   try {
     const { amount, name, payment, type, userId } = req.body;

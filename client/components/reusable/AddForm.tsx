@@ -1,9 +1,11 @@
 import { Text, View, ScrollView, StyleSheet } from "react-native";
-import { SelectList } from "react-native-dropdown-select-list";
 import { TextInput } from "react-native-gesture-handler";
 import { Colors } from "../../Theme/colors";
 import FormButton from "../../components/ui/FormButton";
 import { useForm, Controller } from "react-hook-form";
+import { Picker } from "@react-native-picker/picker";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
 interface formData {
   name: string;
   amount: string;
@@ -11,17 +13,26 @@ interface formData {
   type: string;
 }
 
+type transformForm = {
+  name: string;
+  amount: string;
+  payment: { key: string; value: string };
+  type: { key: string; value: string };
+  userId: string;
+};
+
 interface addFormProps {
-  sendForm: (data: formData) => void;
+  sendForm: (data: transformForm) => void;
   initialData: {
     name: string;
     amount: string;
-    payment: any;
-    type: any;
+    payment: string;
+    type: string;
   };
 }
 
 const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
+  const { user } = useSelector((state: RootState) => state.user);
   const {
     handleSubmit,
     control,
@@ -36,21 +47,14 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
     },
   });
 
-  const type = [
-    { key: "Expenses", value: "Expenses" },
-    { key: "Income", value: "Income" },
-  ];
-  const list = [
-    { key: "Food", value: "Food" },
-    { key: "Fun", value: "Fun" },
-    { key: "Education", value: "Education" },
-    { key: "Work", value: "Work" },
-    { key: "Services", value: "Services" },
-    { key: "Other", value: "Other" },
-  ];
-
   const onSubmit = (data: formData) => {
-    sendForm(data);
+    const formData: transformForm = {
+      ...data,
+      payment: { key: data.payment, value: data.payment },
+      type: { key: data.type, value: data.type },
+      userId: user,
+    };
+    sendForm(formData);
     reset({
       name: initialData.name,
       amount: initialData.amount,
@@ -103,61 +107,47 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
         />
         {errors.amount && <Text style={styles.error}>Amount is required.</Text>}
       </View>
+
       <View>
         <Text style={styles.subtitle}>Payment</Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <SelectList
-              setSelected={(val: any) => onChange(val)}
-              data={type}
-              save="value"
-              onSelect={onBlur}
-              defaultOption={initialData.payment}
-              boxStyles={{
-                height: 50,
-                borderWidth: 1,
-                borderColor: Colors.primary,
-                borderRadius: 10,
-                padding: 10,
-              }}
-            />
-          )}
-          name="payment"
-        />
-        {errors.payment && (
-          <Text style={styles.error}>Payment is required.</Text>
-        )}
+        <View style={styles.pickerInput}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                selectedValue={value}
+                onValueChange={(itemValue) => onChange(itemValue)}
+              >
+                <Picker.Item label="Expenses" value="Expenses" />
+                <Picker.Item label="Income" value="Income" />
+              </Picker>
+            )}
+            name="payment"
+          />
+        </View>
       </View>
+
       <View>
         <Text style={styles.subtitle}>Type</Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <SelectList
-              setSelected={(val: any) => onChange(val)}
-              data={list}
-              save="value"
-              onSelect={onBlur}
-              defaultOption={initialData.type}
-              boxStyles={{
-                height: 50,
-                borderWidth: 1,
-                borderColor: Colors.primary,
-                borderRadius: 10,
-                padding: 10,
-              }}
-            />
-          )}
-          name="type"
-        />
-        {errors.type && <Text style={styles.error}>Type is required.</Text>}
+        <View style={styles.pickerInput}>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Picker
+                selectedValue={value}
+                onValueChange={(itemValue) => onChange(itemValue)}
+              >
+                <Picker.Item label="Food" value="Food" />
+                <Picker.Item label="Fun" value="Fun" />
+                <Picker.Item label="Education" value="Education" />
+                <Picker.Item label="Work" value="Work" />
+                <Picker.Item label="Services" value="Services" />
+                <Picker.Item label="Other" value="Other" />
+              </Picker>
+            )}
+            name="type"
+          />
+        </View>
       </View>
 
       <View style={styles.buttonContainer}>
@@ -183,6 +173,11 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary,
     borderRadius: 10,
     padding: 10,
+  },
+  pickerInput: {
+    borderWidth: 1,
+    borderColor: Colors.primary,
+    borderRadius: 10,
   },
   buttonContainer: {
     marginVertical: 20,
