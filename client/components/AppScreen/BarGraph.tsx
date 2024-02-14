@@ -73,7 +73,8 @@ const BarGraph: React.FC<barGraphProps> = ({ barData }) => {
     <Card>
       <BarChart
         barWidth={28}
-        noOfSections={5}
+        noOfSections={10}
+        maxValue={100}
         secondaryYAxis={false}
         frontColor={Colors.basicGray}
         data={extractedData}
