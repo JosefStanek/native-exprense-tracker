@@ -69,7 +69,7 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
         <Controller
           control={control}
           rules={{
-            required: true,
+            required: "Name is required",
             maxLength: 100,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -83,7 +83,7 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
           )}
           name="name"
         />
-        {errors.name && <Text style={styles.error}>Name is required.</Text>}
+        {errors.name && <Text style={styles.error}>{errors.name.message}</Text>}
       </View>
 
       <View>
@@ -91,8 +91,12 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
         <Controller
           control={control}
           rules={{
-            required: true,
+            required: "Amount is required",
             maxLength: 100,
+            pattern: {
+              value: /^\d+$/,
+              message: "Insert number without white space",
+            },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -105,7 +109,9 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
           )}
           name="amount"
         />
-        {errors.amount && <Text style={styles.error}>Amount is required.</Text>}
+        {errors.amount && (
+          <Text style={styles.error}>{errors.amount.message}</Text>
+        )}
       </View>
 
       <View>
