@@ -31,9 +31,10 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
     queryFn: () => getCategoryList(userId, headerTitle),
   });
 
-  const filteredData = data.filter((item: { name: string }) => {
+  const filteredData = data?.filter((item: { name: string }) => {
     return item.name.toLowerCase().includes(input.toLowerCase());
   });
+
   return (
     <View style={styles.screen}>
       <View style={[styles.inputContainer, { borderColor: headerColor }]}>
