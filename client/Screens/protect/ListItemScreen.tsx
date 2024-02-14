@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, TextInput, StyleSheet, FlatList } from "react-native";
 import { getCategoryList } from "../../http/expense-http";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
@@ -13,6 +13,7 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
   route,
   navigation,
 }) => {
+  const [input, setInput] = useState("");
   const userId = route.params.userId;
   const headerColor = route.params.color;
   const headerTitle = route.params.listId;
@@ -29,10 +30,16 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
     queryKey: ["category"],
     queryFn: () => getCategoryList(userId, headerTitle),
   });
+
+  const filteredData = data.filter((item: { name: string }) => {
+    return item.name.toLowerCase().includes(input.toLowerCase());
+  });
   return (
     <View style={styles.screen}>
       <View style={[styles.inputContainer, { borderColor: headerColor }]}>
         <TextInput
+          value={input}
+          onChangeText={setInput}
           style={[styles.input, { borderColor: headerColor }]}
           placeholder="find"
         />
@@ -51,7 +58,7 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
               justifyContent: "center",
               alignItems: "center",
             }}
-            data={data}
+            data={filteredData}
             keyExtractor={(item) => {
               return item._id;
             }}
