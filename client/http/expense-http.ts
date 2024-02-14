@@ -41,6 +41,20 @@ export const getTotal = async (user: string) => {
 export const getCategoryList = async (user: string, category: string) => {
   try {
     const res = await axios.get(`${url}/expense/api/${user}/${category}`);
+    return res.data.categories;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data.error;
+    } else {
+      return "An unexpected error occurred";
+    }
+  }
+};
+
+export const deleteExpense = async (id: string) => {
+  try {
+    const res = await axios.delete(`${url}/expense/api/${id}`);
+    await queryClient.invalidateQueries({ queryKey: ["category"] });
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

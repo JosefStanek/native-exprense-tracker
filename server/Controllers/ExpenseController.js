@@ -42,7 +42,8 @@ export const getExpenses = async (req, res) => {
 export const getCategory = async (req, res) => {
   try {
     const { userId, category } = req.params;
-    if (!userId || category) {
+    console.log(userId, category);
+    if (!userId || !category) {
       return res.status(401).json({
         message: "Unauthorizate",
       });
@@ -57,6 +58,7 @@ export const getCategory = async (req, res) => {
         return categories;
       });
 
+    console.log(categories);
     return res.status(200).json({
       categories,
     });
@@ -97,6 +99,23 @@ export const postExpenses = async (req, res) => {
   }
 };
 export const deleteExpenses = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.statu(404).json({
+        message: "Id not found",
+      });
+    }
+
+    const deletedItem = await Expense.findByIdAndDelete(id);
+    res.status(200).json({
+      item: deletedItem,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
   // id
 };
 export const updateExpenses = async (req, res) => {

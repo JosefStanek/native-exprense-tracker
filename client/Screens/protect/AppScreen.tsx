@@ -9,7 +9,6 @@ import ExpenseBar from "../../components/AppScreen/ExpenseBar";
 import { useQuery } from "@tanstack/react-query";
 import { getTotal } from "../../http/expense-http";
 import BarGraph from "../../components/AppScreen/BarGraph";
-import Card from "../../components/ui/Card";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import LastValues from "../../components/AppScreen/LastValues";
 interface appScreenProps {
@@ -61,8 +60,13 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
           <ExpenseBar expenses={data.expenses} incomes={data.incomes} />
 
           <PieGraph pieData={data} />
-          <BarGraph barData={data.total} />
-          <LastValues expenses={data.expenses} incomes={data.incomes} />
+
+          {data.total.length > 0 && (
+            <>
+              <BarGraph barData={data.total} />
+              <LastValues expenses={data.expenses} incomes={data.incomes} />
+            </>
+          )}
         </>
       )}
     </ScrollView>

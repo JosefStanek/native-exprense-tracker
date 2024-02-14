@@ -29,12 +29,19 @@ interface LastValuesProps {
 const LastValues: React.FC<LastValuesProps> = ({ expenses, incomes }) => {
   const lastExpense = expenses[0];
   const lastIncome = incomes[0];
-  const expenseTime = moment(lastExpense.createdAt);
-  const incomeTime = moment(lastIncome.createdAt);
+  let expenseTime;
+  let incomeTime;
+  if (lastExpense) {
+    expenseTime = moment(lastExpense.createdAt);
+  }
+  if (lastIncome) {
+    incomeTime = moment(lastIncome.createdAt);
+  }
+
   const screetWidth = Dimensions.get("window").width;
   return (
     <ScrollView horizontal={true}>
-      {expenses.length > 0 && (
+      {expenseTime && (
         <View style={{ width: screetWidth }}>
           <Card>
             <Text style={[styles.title, { color: Colors.secondary }]}>
@@ -78,7 +85,7 @@ const LastValues: React.FC<LastValuesProps> = ({ expenses, incomes }) => {
           </Card>
         </View>
       )}
-      {incomes.length > 0 && (
+      {incomeTime && (
         <View style={{ width: screetWidth }}>
           <Card>
             <Text style={[styles.title, { color: Colors.sun }]}>

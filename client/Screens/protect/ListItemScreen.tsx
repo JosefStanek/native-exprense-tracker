@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { View, Text, TextInput, StyleSheet, FlatList } from "react-native";
 import { getCategoryList } from "../../http/expense-http";
-
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import ListItem from "../../components/ListItemScreen/ListItem";
 interface ListItemScreenProps {
   route: any;
   navigation: any;
@@ -27,9 +27,7 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
 
   const { data, isPending } = useQuery({
     queryKey: ["category"],
-    queryFn: async () => {
-      getCategoryList(userId, headerTitle);
-    },
+    queryFn: () => getCategoryList(userId, headerTitle),
   });
   return (
     <View style={styles.screen}>
@@ -40,9 +38,28 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
         />
       </View>
       <View style={styles.listContainer}>
-        {isPending && <Text>Loading...</Text>}
-        {!data && <Text>You have nothing in this category yet.</Text>}
-        {/* {data && <FlatList />} */}
+        {isPending && <LoadingSpinner />}
+        {!data ||
+          (data.length === 0 && (
+            <Text style={styles.emptyList}>
+              You have nothing in this category yet.
+            </Text>
+          ))}
+        {data && (
+          <FlatList
+            contentContainerStyle={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            data={data}
+            keyExtractor={(item) => {
+              return item._id;
+            }}
+            renderItem={(dataItem) => (
+              <ListItem item={dataItem.item} backgroundColor={headerColor} />
+            )}
+          />
+        )}
       </View>
     </View>
   );
@@ -72,5 +89,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     marginVertical: 20,
+  },
+  emptyList: {
+    fontSize: 18,
   },
 });
