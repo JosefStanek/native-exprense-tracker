@@ -2,7 +2,7 @@ import Card from "../../components/ui/Card";
 import Title from "../../components/ui/Title";
 import AddForm from "../../components/reusable/AddForm";
 import { useMutation } from "@tanstack/react-query";
-import { postExpense, queryClient } from "../../http/expense-http";
+import { postExpense } from "../../http/expense-http";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
@@ -38,8 +38,6 @@ const AddScreen: React.FC<addScreenProps> = ({ navigation }) => {
       postExpense(formData);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["total"] });
-      navigation.navigate("expenses");
       console.log("on success");
     },
     onError: () => {

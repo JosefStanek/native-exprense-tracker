@@ -15,6 +15,7 @@ interface formData {
 export const postExpense = async (data: formData) => {
   try {
     const res = await axios.post(`${url}/expense/api`, data);
+    await queryClient.invalidateQueries({ queryKey: ["total"] });
     return res.data.message;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -55,6 +56,8 @@ export const deleteExpense = async (id: string) => {
   try {
     const res = await axios.delete(`${url}/expense/api/${id}`);
     await queryClient.invalidateQueries({ queryKey: ["category"] });
+    await queryClient.invalidateQueries({ queryKey: ["total"] });
+
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

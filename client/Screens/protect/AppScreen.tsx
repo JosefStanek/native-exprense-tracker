@@ -49,7 +49,7 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
 
   const { data, isPending } = useQuery({
     queryKey: ["total"],
-    queryFn: async () => getTotal(user),
+    queryFn: () => getTotal(user),
   });
 
   return (
