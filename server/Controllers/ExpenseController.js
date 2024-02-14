@@ -95,12 +95,12 @@ export const postExpenses = async (req, res) => {
   try {
     const { amount, name, payment, type, userId } = req.body;
     if (
-      !amount |
-      !name |
-      !payment.value |
-      !payment.key |
-      !type.value |
-      !type.key |
+      !amount ||
+      !name ||
+      !payment.value ||
+      !payment.key ||
+      !type.value ||
+      !type.key ||
       !userId
     ) {
       return res.status(500).json({
@@ -140,5 +140,31 @@ export const deleteExpenses = async (req, res) => {
   // id
 };
 export const updateExpenses = async (req, res) => {
-  //id
+  try {
+    const { userId, itemId } = req.params;
+    const newItem = req.body;
+    console.log(newItem);
+    if (!userId || !itemId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+    const updateItem = await Expense.findByIdAndUpdate(newItem.expenseId, {
+      name: newItem.name,
+      amount: newItem.amount,
+      payment: newItem.payment,
+      type: newItem.type,
+      userId: newItem.userId,
+    });
+
+    if (updateItem) {
+      return res.status(200).json({
+        message: "Update success",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
 };

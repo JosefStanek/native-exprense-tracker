@@ -5,19 +5,28 @@ import Card from "../../components/ui/Card";
 import Title from "../../components/ui/Title";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
-import { getExpenseItem } from "../../http/expense-http";
+import { getExpenseItem, updateExpenseItem } from "../../http/expense-http";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 interface ListItemDetailScreenProps {
   route: any;
   navigation: any;
 }
-type transformForm = {
+type formData = {
   name: string;
   amount: string;
   payment: { key: string; value: string };
   type: { key: string; value: string };
   userId: string;
+};
+
+type data = {
+  name: string;
+  amount: string;
+  payment: { key: string; value: string };
+  type: { key: string; value: string };
+  userId: string;
+  expenseId: string;
 };
 
 const ListItemDetailScreen: React.FC<ListItemDetailScreenProps> = ({
@@ -34,15 +43,17 @@ const ListItemDetailScreen: React.FC<ListItemDetailScreenProps> = ({
       },
     });
   }, [navigation]);
-
   const { data, isPending } = useQuery({
-    queryKey: ["expensesItem", expenseId],
+    queryKey: ["expense" + expenseId],
     queryFn: () => getExpenseItem(user, expenseId),
   });
 
   const { mutate } = useMutation({
-    mutationFn: async (data: transformForm) => {
-      console.log("data", data);
+    mutationFn: async (data: data) => {
+      await updateExpenseItem(data);
+    },
+    onSuccess: async () => {
+      // navigation.goBack();
     },
   });
 
@@ -52,8 +63,9 @@ const ListItemDetailScreen: React.FC<ListItemDetailScreenProps> = ({
     payment: data?.payment.value,
     type: data?.type.value,
   };
-  const onSubmit = (data: any) => {
-    mutate(data);
+  const onSubmit = (data: formData) => {
+    const updateData = { ...data, expenseId: expenseId };
+    mutate(updateData);
   };
 
   return (

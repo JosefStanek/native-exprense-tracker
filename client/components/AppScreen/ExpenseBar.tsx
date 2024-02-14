@@ -39,7 +39,7 @@ const getTotalExpense = (expenses: { amount: string }[]) => {
 
 const getTotalIncome = (incomes: { amount: string }[]) => {
   const incomeArray = incomes.map((income) => {
-    return { type: "expenses", value: income.amount };
+    return { type: "incomes", value: income.amount };
   });
 
   const totalIncome = incomeArray.reduce((sum, item) => {
@@ -74,7 +74,7 @@ const ExpenseBar: React.FC<expenseBarProps> = ({ expenses, incomes }) => {
             Expenses: {expenses ? expense : 0}
           </Text>
           <Text style={[styles.subtitle, { color: Colors.sun }]}>
-            Incomes: {incomes ? expense : 0}
+            Incomes: {incomes ? income : 0}
           </Text>
         </View>
       </Card>

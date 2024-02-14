@@ -20,6 +20,6 @@ router.post("/api", postExpenses);
 // post delete expense/income
 router.delete("/api/:id", deleteExpenses);
 // patch expense/income
-router.patch("/api/:id", updateExpenses);
+router.patch("/api/:userId/item/:itemId", updateExpenses);
 
 export default router;

@@ -10,6 +10,7 @@ interface formData {
   payment: { key: string; value: string };
   type: { key: string; value: string };
   userId: string;
+  expenseId: string;
 }
 
 export const postExpense = async (data: formData) => {
@@ -68,10 +69,13 @@ export const deleteExpense = async (id: string) => {
   }
 };
 
-export const updateExpense = async (data: formData) => {
+export const updateExpenseItem = async (data: formData) => {
   try {
-    const res = await axios.post(`${url}/expense/api`, data);
-    await queryClient.invalidateQueries({ queryKey: ["total"] });
+    const res = await axios.patch(
+      `${url}/expense/api/${data.userId}/item/${data.expenseId}`,
+      data
+    );
+    await queryClient.invalidateQueries();
     return res.data.message;
   } catch (error) {
     if (axios.isAxiosError(error)) {
