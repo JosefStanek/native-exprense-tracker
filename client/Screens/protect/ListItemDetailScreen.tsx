@@ -53,7 +53,7 @@ const ListItemDetailScreen: React.FC<ListItemDetailScreenProps> = ({
       await updateExpenseItem(data);
     },
     onSuccess: async () => {
-      // navigation.goBack();
+      navigation.goBack();
     },
   });
 

@@ -11,12 +11,15 @@ import { getTotal } from "../../http/expense-http";
 import BarGraph from "../../components/AppScreen/BarGraph";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import LastValues from "../../components/AppScreen/LastValues";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../store/slices/userSlice";
 interface appScreenProps {
   navigation: any;
 }
 
 const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
   const { user } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   useEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -38,6 +41,9 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
       ),
       headerRight: () => (
         <Entypo
+          onPress={() => {
+            dispatch(logoutUser());
+          }}
           name="log-out"
           size={24}
           color={Colors.basicLight}

@@ -5,7 +5,8 @@ import { Colors } from "../../Theme/colors";
 import LoginForm from "../../components/reusable/LoginForm";
 import Title from "../../components/ui/Title";
 import { useMutation } from "@tanstack/react-query";
-
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../store/slices/userSlice";
 interface loginProps {
   navigation: any;
 }
@@ -16,30 +17,38 @@ type formData = {
 };
 
 const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const { mutate } = useMutation({
     mutationFn: async (data: formData) => {
-      if (data.login) {
-        const res = await axios.post(
-          `http://192.168.0.80:3000/auth/api/login`,
-          {
-            email: data.email,
-            password: data.password,
-          }
-        );
-        return res.data;
-      } else {
-        return;
+      try {
+        if (data.login) {
+          const res = await axios.post(
+            `http://192.168.0.80:3000/auth/api/login`,
+            {
+              email: data.email,
+              password: data.password,
+            }
+          );
+          console.log(res);
+          return res.data;
+        } else {
+          return;
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          return error.response?.data.error;
+        } else {
+          return "An unexpected error occurred";
+        }
       }
     },
-    onSuccess: (data) => {
-      console.log(console.log("data", data));
+    onSuccess: (data: { email: string; token: string }) => {
+      console.log(data);
+      const userEmail: string = data.email;
+      dispatch(loginUser({ user: userEmail }));
     },
     onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        return error.response?.data.error;
-      } else {
-        return "An unexpected error occurred";
-      }
+      console.log("error");
     },
   });
   const login = (email: string, password: string, login: boolean) => {

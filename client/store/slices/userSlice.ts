@@ -5,7 +5,7 @@ type reduxState = {
 };
 
 const initialState: reduxState = {
-  user: "test@test.cz",
+  user: "",
 };
 
 const userSlice = createSlice({
@@ -21,6 +21,6 @@ const userSlice = createSlice({
   },
 });
 
-export const logoutUser = userSlice.actions.loginUser;
-export const loginUser = userSlice.actions.logoutUser;
+export const loginUser = userSlice.actions.loginUser;
+export const logoutUser = userSlice.actions.logoutUser;
 export default userSlice.reducer;
