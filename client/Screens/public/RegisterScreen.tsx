@@ -7,6 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Toast } from "toastify-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../store/slices/userSlice";
 interface registerProps {
   navigation: any;
 }
@@ -17,6 +20,7 @@ type formData = {
 };
 
 const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: formData) => {
       if (data.login === false) {
@@ -31,6 +35,12 @@ const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
       } else {
         return;
       }
+    },
+    onSuccess: (data: { email: string; token: string }) => {
+      const userEmail: string = data.email;
+      AsyncStorage.setItem("token", data.token);
+      AsyncStorage.setItem("user", data.email);
+      dispatch(loginUser({ user: userEmail }));
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {

@@ -13,6 +13,7 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import LastValues from "../../components/AppScreen/LastValues";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../store/slices/userSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 interface appScreenProps {
   navigation: any;
 }
@@ -42,6 +43,8 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
       headerRight: () => (
         <Entypo
           onPress={() => {
+            AsyncStorage.removeItem("token");
+            AsyncStorage.removeItem("user");
             dispatch(logoutUser());
           }}
           name="log-out"

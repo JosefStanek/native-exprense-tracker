@@ -74,7 +74,6 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              multiline
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}

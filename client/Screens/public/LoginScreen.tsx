@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/slices/userSlice";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Toast } from "toastify-react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 interface loginProps {
   navigation: any;
 }
@@ -22,35 +23,30 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
   const dispatch = useDispatch();
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: formData) => {
-      try {
-        if (data.login) {
-          const res = await axios.post(
-            `http://192.168.0.80:3000/auth/api/login`,
-            {
-              email: data.email,
-              password: data.password,
-            }
-          );
-          console.log(res);
-          return res.data;
-        } else {
-          return;
-        }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          Toast.error(error.response?.data.error, "top");
-        } else {
-          return "An unexpected error occurred";
-        }
+      if (data.login) {
+        const res = await axios.post(
+          `http://192.168.0.80:3000/auth/api/login`,
+          {
+            email: data.email,
+            password: data.password,
+          }
+        );
+
+        return res.data;
       }
     },
     onSuccess: (data: { email: string; token: string }) => {
-      console.log(data);
       const userEmail: string = data.email;
+      AsyncStorage.setItem("token", data.token);
+      AsyncStorage.setItem("user", data.email);
       dispatch(loginUser({ user: userEmail }));
     },
     onError: (error) => {
-      console.log("errir", error.message);
+      if (axios.isAxiosError(error)) {
+        Toast.error(error.response?.data.error, "top");
+      } else {
+        return "An unexpected error occurred";
+      }
     },
   });
   const login = (email: string, password: string, login: boolean) => {
