@@ -22,14 +22,8 @@ const initialData = {
 
 const AddScreen: React.FC = () => {
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: transformForm) => {
-      postExpense(data);
-    },
-    onSuccess: async () => {
-      console.log("on success");
-    },
-    onError: () => {
-      console.log("on error");
+    mutationFn: async (data: any) => {
+      await postExpense(data);
     },
   });
 

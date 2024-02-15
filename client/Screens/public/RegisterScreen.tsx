@@ -32,12 +32,8 @@ const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
         return;
       }
     },
-    onSuccess: (data) => {
-      console.log(console.log("data", data));
-    },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data.error);
         Toast.error(error.response?.data.error, "top");
       } else {
         return "An unexpected error occurred";
