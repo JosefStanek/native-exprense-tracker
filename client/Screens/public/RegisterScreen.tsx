@@ -5,6 +5,8 @@ import LoginForm from "../../components/reusable/LoginForm";
 import Title from "../../components/ui/Title";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import { Toast } from "toastify-react-native";
 interface registerProps {
   navigation: any;
 }
@@ -15,7 +17,7 @@ type formData = {
 };
 
 const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: formData) => {
       if (data.login === false) {
         const res = await axios.post(
@@ -36,6 +38,7 @@ const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
     onError: (error) => {
       if (axios.isAxiosError(error)) {
         console.log(error.response?.data.error);
+        Toast.error(error.response?.data.error, "top");
       } else {
         return "An unexpected error occurred";
       }
@@ -47,6 +50,7 @@ const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
   };
   return (
     <View style={styles.screen}>
+      {isPending && <LoadingSpinner />}
       <Card>
         <Title>Expense Tracker</Title>
         <Image

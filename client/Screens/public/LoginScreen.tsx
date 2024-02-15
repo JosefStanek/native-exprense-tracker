@@ -7,6 +7,8 @@ import Title from "../../components/ui/Title";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../store/slices/userSlice";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import { Toast } from "toastify-react-native";
 interface loginProps {
   navigation: any;
 }
@@ -18,7 +20,7 @@ type formData = {
 
 const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: formData) => {
       try {
         if (data.login) {
@@ -36,7 +38,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          return error.response?.data.error;
+          Toast.error(error.response?.data.error, "top");
         } else {
           return "An unexpected error occurred";
         }
@@ -48,7 +50,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
       dispatch(loginUser({ user: userEmail }));
     },
     onError: (error) => {
-      console.log("error");
+      console.log("errir", error.message);
     },
   });
   const login = (email: string, password: string, login: boolean) => {
@@ -57,6 +59,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
+      {isPending && <LoadingSpinner />}
       <Card>
         <Title>Expense Tracker</Title>
         <Image
