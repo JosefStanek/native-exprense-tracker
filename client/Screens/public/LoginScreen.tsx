@@ -25,7 +25,7 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
     mutationFn: async (data: formData) => {
       if (data.login) {
         const res = await axios.post(
-          `http://192.168.0.80:3000/auth/api/login`,
+          `https://expense-tracker-backend-rjsz.onrender.com/auth/api/login`,
           {
             email: data.email,
             password: data.password,

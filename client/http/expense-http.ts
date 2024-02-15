@@ -2,7 +2,7 @@ import axios from "axios";
 import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient();
 
-const url = "http://192.168.0.80:3000";
+const url = "https://expense-tracker-backend-rjsz.onrender.com/";
 
 interface formData {
   amount: string;

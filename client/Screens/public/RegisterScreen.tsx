@@ -25,7 +25,7 @@ const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
     mutationFn: async (data: formData) => {
       if (data.login === false) {
         const res = await axios.post(
-          `http://192.168.0.80:3000/auth/api/register`,
+          `https://expense-tracker-backend-rjsz.onrender.com/auth/api/register`,
           {
             email: data.email,
             password: data.password,
