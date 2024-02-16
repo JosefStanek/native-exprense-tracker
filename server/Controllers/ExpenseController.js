@@ -3,9 +3,7 @@ export const getExpenses = async (req, res) => {
   try {
     const { userId } = req.params;
     if (!userId) {
-      return res.status(401).json({
-        message: "Unauthorizate",
-      });
+      throw new Error("unautorizate");
     }
 
     const expenseTotalPromise = Expense.find({ userId: userId });

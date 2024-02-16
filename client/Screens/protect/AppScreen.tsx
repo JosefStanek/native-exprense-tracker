@@ -56,7 +56,7 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["total"],
     queryFn: () => getTotal(user),
   });
@@ -78,6 +78,8 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
           )}
         </>
       )}
+      {!data && <Text>Something wrong</Text>}
+      {error && <Text>Error</Text>}
     </ScrollView>
   );
 };
