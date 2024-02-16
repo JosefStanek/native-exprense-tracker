@@ -11,10 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import ListItemScreen from "../Screens/protect/ListItemScreen";
 import ListItemDetailScreen from "../Screens/protect/ListItemDetailScreen";
-import { useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginUser } from "../store/slices/userSlice";
-import { useDispatch } from "react-redux";
+
 const Stack = createStackNavigator();
 
 function PublicNavigation() {
@@ -63,19 +60,8 @@ function ProtectNavigation() {
 }
 
 const Navigation = () => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    const getMe = async () => {
-      const user = await AsyncStorage.getItem("user");
-      console.log(user);
-      if (user) {
-        dispatch(loginUser({ user: user }));
-      }
-    };
-    getMe();
-  }, []);
   return (
     <NavigationContainer>
       {user && <ProtectNavigation />}

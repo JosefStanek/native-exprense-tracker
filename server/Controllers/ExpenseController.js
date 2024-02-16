@@ -8,19 +8,32 @@ export const getExpenses = async (req, res) => {
       });
     }
 
-    const [total, expenses, incomes] = await Promise.all([
-      Expense.find({ userId: userId }),
-      Expense.find({ userId: userId, "payment.value": "Expenses" })
-        .sort("-createdAt")
-        .then((expenses) => {
-          return expenses;
-        }),
-      Expense.find({ userId: userId, "payment.value": "Income" })
-        .sort("createdAt")
-        .then((incomes) => {
-          return incomes;
-        }),
+    const expenseTotalPromise = Expense.find({ userId: userId });
+    const expensesPromise = Expense.find({
+      userId: userId,
+      "payment.value": "Expenses",
+    }).sort("-createdAt");
+    const incomesPromise = Expense.find({
+      userId: userId,
+      "payment.value": "Income",
+    }).sort("createdAt");
+
+    const results = await Promise.allSettled([
+      expenseTotalPromise,
+      expensesPromise,
+      incomesPromise,
     ]);
+
+    const [totalResult, expensesResult, incomesResult] = results;
+    const total = totalResult.status === "fulfilled" ? totalResult.value : null;
+    const expenses =
+      expensesResult.status === "fulfilled" ? expensesResult.value : null;
+    const incomes =
+      incomesResult.status === "fulfilled" ? incomesResult.value : null;
+
+    if (!total || !expenses || !incomes) {
+      throw new Error("Database crashed");
+    }
 
     return res.status(200).json({
       total: total,
