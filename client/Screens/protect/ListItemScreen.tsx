@@ -1,6 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  FlatList,
+  StatusBar,
+} from "react-native";
 import { getCategoryList } from "../../http/expense-http";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import ListItem from "../../components/ListItemScreen/ListItem";
@@ -26,7 +33,7 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
     });
   }, [headerColor, headerTitle, navigation]);
 
-  const { data, isPending } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["category"],
     queryFn: () => getCategoryList(userId, headerTitle),
   });
@@ -36,40 +43,49 @@ const ListItemScreen: React.FC<ListItemScreenProps> = ({
   });
 
   return (
-    <View style={styles.screen}>
-      <View style={[styles.inputContainer, { borderColor: headerColor }]}>
-        <TextInput
-          value={input}
-          onChangeText={setInput}
-          style={[styles.input, { borderColor: headerColor }]}
-          placeholder="find"
-        />
-      </View>
-      <View style={styles.listContainer}>
-        {isPending && <LoadingSpinner />}
-        {!data ||
-          (data.length === 0 && (
-            <Text style={styles.emptyList}>
-              You have nothing in this category yet.
-            </Text>
-          ))}
-        {data && (
-          <FlatList
-            contentContainerStyle={{
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            data={filteredData}
-            keyExtractor={(item) => {
-              return item._id;
-            }}
-            renderItem={(dataItem) => (
-              <ListItem item={dataItem.item} backgroundColor={headerColor} />
-            )}
+    <>
+      <StatusBar backgroundColor={headerColor} />
+      <View style={styles.screen}>
+        <View style={[styles.inputContainer, { borderColor: headerColor }]}>
+          <TextInput
+            value={input}
+            onChangeText={setInput}
+            style={[styles.input, { borderColor: headerColor }]}
+            placeholder="find"
           />
-        )}
+        </View>
+        <View style={styles.listContainer}>
+          {isPending && <LoadingSpinner />}
+          {!data ||
+            (data.length === 0 && (
+              <Text style={styles.emptyList}>
+                You have nothing in this category yet.
+              </Text>
+            ))}
+          {data && (
+            <FlatList
+              contentContainerStyle={{
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              data={filteredData}
+              keyExtractor={(item) => {
+                return item._id;
+              }}
+              renderItem={(dataItem) => (
+                <ListItem item={dataItem.item} backgroundColor={headerColor} />
+              )}
+            />
+          )}
+
+          {error && (
+            <Text style={{ textAlign: "center", marginVertical: 10 }}>
+              Something wrong, try again later
+            </Text>
+          )}
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

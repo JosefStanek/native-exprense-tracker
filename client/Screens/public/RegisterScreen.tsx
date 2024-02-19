@@ -1,4 +1,11 @@
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  StatusBar,
+} from "react-native";
 import Card from "../../components/ui/Card";
 import { Colors } from "../../Theme/colors";
 import LoginForm from "../../components/reusable/LoginForm";
@@ -55,27 +62,34 @@ const RegisterScreen: React.FC<registerProps> = ({ navigation }) => {
     mutate({ email, password, login });
   };
   return (
-    <View style={styles.screen}>
-      {isPending && <LoadingSpinner />}
-      <Card>
-        <Title>Expense Tracker</Title>
-        <Image
-          style={styles.image}
-          source={require("../../assets/images/investing.png")}
-        />
-        <LoginForm buttonText="register" sendForm={login} status={"register"} />
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Do you want to </Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("login");
-            }}
-          >
-            <Text style={styles.link}>Login?</Text>
-          </Pressable>
-        </View>
-      </Card>
-    </View>
+    <>
+      <StatusBar backgroundColor={Colors.primary} />
+      <View style={styles.screen}>
+        {isPending && <LoadingSpinner />}
+        <Card>
+          <Title>Expense Tracker</Title>
+          <Image
+            style={styles.image}
+            source={require("../../assets/images/investing.png")}
+          />
+          <LoginForm
+            buttonText="register"
+            sendForm={login}
+            status={"register"}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Do you want to </Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("login");
+              }}
+            >
+              <Text style={styles.link}>Login?</Text>
+            </Pressable>
+          </View>
+        </Card>
+      </View>
+    </>
   );
 };
 

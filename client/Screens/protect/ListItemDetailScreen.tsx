@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, StatusBar } from "react-native";
 import AddForm from "../../components/reusable/AddForm";
 import Card from "../../components/ui/Card";
 import Title from "../../components/ui/Title";
@@ -8,6 +8,7 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { getExpenseItem, updateExpenseItem } from "../../http/expense-http";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import { Colors } from "../../Theme/colors";
 interface ListItemDetailScreenProps {
   route: any;
   navigation: any;
@@ -48,7 +49,7 @@ const ListItemDetailScreen: React.FC<ListItemDetailScreenProps> = ({
     queryFn: () => getExpenseItem(user, expenseId),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, error } = useMutation({
     mutationFn: async (data: data) => {
       await updateExpenseItem(data);
     },
@@ -70,17 +71,19 @@ const ListItemDetailScreen: React.FC<ListItemDetailScreenProps> = ({
 
   return (
     <>
+      <StatusBar backgroundColor={Colors.primary} />
       {isPending && <LoadingSpinner />}
-      {!data && (
-        <Text style={styles.errorMsg}>
-          Something went wrong, try again later.
-        </Text>
-      )}
-      {data && (
+      {!error && data && (
         <Card>
           <Title>Update</Title>
           <AddForm initialData={initialData} sendForm={onSubmit} />
         </Card>
+      )}
+
+      {error && (
+        <Text style={{ textAlign: "center", marginVertical: 10 }}>
+          Something wrong, try again later
+        </Text>
       )}
     </>
   );

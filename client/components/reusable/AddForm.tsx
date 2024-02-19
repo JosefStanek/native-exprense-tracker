@@ -91,7 +91,6 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
           control={control}
           rules={{
             required: "Amount is required",
-            maxLength: 100,
             pattern: {
               value: /^\d+$/,
               message: "Insert number without white space",
@@ -104,6 +103,7 @@ const AddForm: React.FC<addFormProps> = ({ initialData, sendForm }) => {
               onChangeText={onChange}
               value={value}
               style={styles.input}
+              maxLength={7}
             />
           )}
           name="amount"

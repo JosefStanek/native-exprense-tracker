@@ -4,6 +4,8 @@ import AddForm from "../../components/reusable/AddForm";
 import { useMutation } from "@tanstack/react-query";
 import { postExpense } from "../../http/expense-http";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import { StatusBar, Text } from "react-native";
+import { Colors } from "../../Theme/colors";
 
 type transformForm = {
   name: string;
@@ -21,7 +23,7 @@ const initialData = {
 };
 
 const AddScreen: React.FC = () => {
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending, error } = useMutation({
     mutationFn: async (data: any) => {
       await postExpense(data);
     },
@@ -31,11 +33,20 @@ const AddScreen: React.FC = () => {
     mutate(data);
   };
   return (
-    <Card>
-      {isPending && <LoadingSpinner />}
-      <Title>New Expense</Title>
-      <AddForm initialData={initialData} sendForm={onSubmit} />
-    </Card>
+    <>
+      <StatusBar backgroundColor={Colors.primary} />
+      <Card>
+        {isPending && <LoadingSpinner />}
+        <Title>New Expense</Title>
+
+        {error && (
+          <Text style={{ textAlign: "center", marginVertical: 10 }}>
+            Something wrong, try again later
+          </Text>
+        )}
+        {!error && <AddForm initialData={initialData} sendForm={onSubmit} />}
+      </Card>
+    </>
   );
 };
 

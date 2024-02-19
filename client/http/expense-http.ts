@@ -20,7 +20,7 @@ export const postExpense = async (data: formData) => {
     return res.data.message;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data.error;
+      return Promise.reject(new Error(error.response?.data.error));
     } else {
       return "An unexpected error occurred";
     }
@@ -33,7 +33,7 @@ export const getTotal = async (user: string) => {
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data.error;
+      return Promise.reject(new Error(error.response?.data.error));
     } else {
       return "An unexpected error occurred";
     }
@@ -46,7 +46,7 @@ export const getCategoryList = async (user: string, category: string) => {
     return res.data.categories;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data.error;
+      return Promise.reject(new Error(error.response?.data.error));
     } else {
       return "An unexpected error occurred";
     }
@@ -62,7 +62,7 @@ export const deleteExpense = async (id: string) => {
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data.error;
+      return Promise.reject(new Error(error.response?.data.error));
     } else {
       return "An unexpected error occurred";
     }
@@ -79,7 +79,7 @@ export const updateExpenseItem = async (data: formData) => {
     return res.data.message;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data.error;
+      return Promise.reject(new Error(error.response?.data.error));
     } else {
       return "An unexpected error occurred";
     }
@@ -92,7 +92,7 @@ export const getExpenseItem = async (user: string, itemId: string) => {
     return res.data.item;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data.error;
+      return Promise.reject(new Error(error.response?.data.error));
     } else {
       return "An unexpected error occurred";
     }

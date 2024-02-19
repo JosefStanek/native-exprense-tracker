@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Pressable, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  FlatList,
+  StatusBar,
+} from "react-native";
 import React from "react";
 import { Colors } from "../../Theme/colors";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,32 +25,35 @@ const ListScreen: React.FC<ListScreenProps> = ({ navigation }) => {
     { key: "Other", value: "Other", color: Colors.fuchsia },
   ];
   return (
-    <View style={styles.screen}>
-      <FlatList
-        data={list}
-        renderItem={(dataItem) => (
-          <Pressable
-            style={[
-              styles.outerContainer,
-              { backgroundColor: dataItem.item.color },
-            ]}
-            android_ripple={{ color: Colors.basicLight }}
-            onPress={() => {
-              navigation.navigate("listItem", {
-                userId: user,
-                listId: dataItem.item.value,
-                color: dataItem.item.color,
-              });
-            }}
-          >
-            <View style={styles.innerContainer}>
-              <Text style={styles.title}>{dataItem.item.value}</Text>
-              <MaterialIcons name="navigate-next" size={24} color="white" />
-            </View>
-          </Pressable>
-        )}
-      />
-    </View>
+    <>
+      <StatusBar backgroundColor={Colors.primary} />
+      <View style={styles.screen}>
+        <FlatList
+          data={list}
+          renderItem={(dataItem) => (
+            <Pressable
+              style={[
+                styles.outerContainer,
+                { backgroundColor: dataItem.item.color },
+              ]}
+              android_ripple={{ color: Colors.basicLight }}
+              onPress={() => {
+                navigation.navigate("listItem", {
+                  userId: user,
+                  listId: dataItem.item.value,
+                  color: dataItem.item.color,
+                });
+              }}
+            >
+              <View style={styles.innerContainer}>
+                <Text style={styles.title}>{dataItem.item.value}</Text>
+                <MaterialIcons name="navigate-next" size={24} color="white" />
+              </View>
+            </Pressable>
+          )}
+        />
+      </View>
+    </>
   );
 };
 

@@ -1,4 +1,11 @@
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  StatusBar,
+} from "react-native";
 import axios from "axios";
 import Card from "../../components/ui/Card";
 import { Colors } from "../../Theme/colors";
@@ -54,27 +61,30 @@ const LoginScreen: React.FC<loginProps> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.screen}>
-      {isPending && <LoadingSpinner />}
-      <Card>
-        <Title>Expense Tracker</Title>
-        <Image
-          style={styles.image}
-          source={require("../../assets/images/investing.png")}
-        />
-        <LoginForm buttonText="login" sendForm={login} status={"login"} />
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Create new </Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("register");
-            }}
-          >
-            <Text style={styles.link}>Account.</Text>
-          </Pressable>
-        </View>
-      </Card>
-    </View>
+    <>
+      <StatusBar backgroundColor={Colors.primary} />
+      <View style={styles.screen}>
+        {isPending && <LoadingSpinner />}
+        <Card>
+          <Title>Expense Tracker</Title>
+          <Image
+            style={styles.image}
+            source={require("../../assets/images/investing.png")}
+          />
+          <LoginForm buttonText="login" sendForm={login} status={"login"} />
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Create new </Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("register");
+              }}
+            >
+              <Text style={styles.link}>Account.</Text>
+            </Pressable>
+          </View>
+        </Card>
+      </View>
+    </>
   );
 };
 

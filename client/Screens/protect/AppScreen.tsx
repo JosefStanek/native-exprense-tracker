@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, StatusBar } from "react-native";
 import { Colors } from "../../Theme/colors";
 import { Entypo } from "@expo/vector-icons";
 import { useEffect } from "react";
@@ -56,31 +56,37 @@ const AppScreen: React.FC<appScreenProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const { data, isPending, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["total"],
     queryFn: () => getTotal(user),
   });
-
   return (
-    <ScrollView>
-      {isPending && <LoadingSpinner />}
-      {data && (
-        <>
-          <ExpenseBar expenses={data.expenses} incomes={data.incomes} />
+    <>
+      <StatusBar backgroundColor={Colors.primary} />
+      <ScrollView>
+        {isLoading && <LoadingSpinner />}
+        {data && (
+          <>
+            <ExpenseBar expenses={data.expenses} incomes={data.incomes} />
 
-          <PieGraph pieData={data} />
+            <PieGraph pieData={data} />
 
-          {data.total.length > 0 && (
-            <>
-              <BarGraph barData={data.total} />
-              <LastValues expenses={data.expenses} incomes={data.incomes} />
-            </>
-          )}
-        </>
-      )}
-      {!data && <Text>Something wrong</Text>}
-      {error && <Text>Error</Text>}
-    </ScrollView>
+            {data?.total.length > 0 && (
+              <>
+                <BarGraph barData={data.total} />
+                <LastValues expenses={data.expenses} incomes={data.incomes} />
+              </>
+            )}
+          </>
+        )}
+
+        {error && (
+          <Text style={{ textAlign: "center", marginVertical: 10 }}>
+            Something wrong, try again later
+          </Text>
+        )}
+      </ScrollView>
+    </>
   );
 };
 
